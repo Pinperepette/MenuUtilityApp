@@ -34,6 +34,10 @@ Run the App:
             Toggle File Extensions: Show or hide file extensions in Finder.
             Toggle Icon Hard Disks: Show or hide hard disk icons on the desktop in Finder.
             Create Dock Spacer: Add a spacer to the Dock for better organization.
+            
+
+![Anteprima](/immage.png)
+
 
 How to Contribute
 

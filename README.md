@@ -35,9 +35,9 @@ Run the App:
             Toggle Icon Hard Disks: Show or hide hard disk icons on the desktop in Finder.
             Create Dock Spacer: Add a spacer to the Dock for better organization.
             
-
+<div style="text-align:center">
 ![Anteprima](/immage.png)
-
+</div>
 
 How to Contribute
 

@@ -3,41 +3,40 @@ import subprocess
 import rumps
 import os
 
-def esegui_comandi(comando_verifica, comando_modifica):
-    processo_verifica = subprocess.Popen(comando_verifica, shell=True, stdout=subprocess.PIPE)
-    output_verifica = processo_verifica.communicate()[0]
-    condizione = output_verifica.strip() != b"1"
-    comando = f"{comando_modifica} -bool {'true' if condizione else 'false'} ; killall Finder"
-    subprocess.run(["sh", "-c", comando])
+def execute_commands(verify_command, modify_command):
+    verify_process = subprocess.Popen(verify_command, shell=True, stdout=subprocess.PIPE)
+    output_verify = verify_process.communicate()[0]
+    condition = output_verify.strip() != b"1"
+    command = f"{modify_command} -bool {'true' if condition else 'false'} ; killall Finder"
+    subprocess.run(["sh", "-c", command])
 
+def toggle_finder_visibility(sender):
+    verify_command = "defaults read com.apple.finder AppleShowAllFiles"
+    modify_command = "defaults write com.apple.finder AppleShowAllFiles"
+    execute_commands(verify_command, modify_command)
 
-def mostra_nascondi_files(sender):
-    comando_verifica = "defaults read com.apple.finder AppleShowAllFiles"
-    comando_modifica = "defaults write com.apple.finder AppleShowAllFiles"
-    esegui_comandi(comando_verifica, comando_modifica)
+def toggle_file_extensions(sender):
+    verify_command = "defaults read NSGlobalDomain AppleShowAllExtensions"
+    modify_command = "defaults write NSGlobalDomain AppleShowAllExtensions"
+    execute_commands(verify_command, modify_command)
 
-def mostra_nascondi_files_extensions(sender):
-    comando_verifica = "defaults read NSGlobalDomain AppleShowAllExtensions"
-    comando_modifica = "defaults write NSGlobalDomain AppleShowAllExtensions"
-    esegui_comandi(comando_verifica, comando_modifica)
+def toggle_hard_drive_icon(sender):
+    verify_command = "defaults read com.apple.finder ShowHardDrivesOnDesktop"
+    modify_command = "defaults write com.apple.finder ShowHardDrivesOnDesktop"
+    execute_commands(verify_command, modify_command)
 
-def mostra_nascondi_icona_disco_rigido(sender):
-    comando_verifica = "defaults read com.apple.finder ShowHardDrivesOnDesktop"
-    comando_modifica = "defaults write com.apple.finder ShowHardDrivesOnDesktop"
-    esegui_comandi(comando_verifica, comando_modifica)
-
-def crea_spazio_dock(sender):
-    comando_spazio = 'defaults write com.apple.dock persistent-apps -array-add \'{"tile-type"="spacer-tile";}\'; killall Dock'
-    subprocess.run(["sh", "-c", comando_spazio])
+def create_dock_spacer(sender):
+    spacer_command = 'defaults write com.apple.dock persistent-apps -array-add \'{"tile-type"="spacer-tile";}\'; killall Dock'
+    subprocess.run(["sh", "-c", spacer_command])
 
 class UtilityApp(rumps.App):
     def __init__(self):
         super(UtilityApp, self).__init__("Utility", icon=os.path.join(os.getcwd(), "icon.png"))
         self.menu = [
-            rumps.MenuItem("Toggle Finder Visibility", callback=mostra_nascondi_files),
-            rumps.MenuItem("Toggle File Extensions", callback=mostra_nascondi_files_extensions),
-            rumps.MenuItem("Toggle icon Hard disks", callback=mostra_nascondi_icona_disco_rigido),
-            rumps.MenuItem("Create Dock Spacer", callback=crea_spazio_dock)
+            rumps.MenuItem("Toggle Finder Visibility", callback=toggle_finder_visibility),
+            rumps.MenuItem("Toggle File Extensions", callback=toggle_file_extensions),
+            rumps.MenuItem("Toggle Hard Drive Icon", callback=toggle_hard_drive_icon),
+            rumps.MenuItem("Create Dock Spacer", callback=create_dock_spacer)
         ]
 
 if __name__ == "__main__":

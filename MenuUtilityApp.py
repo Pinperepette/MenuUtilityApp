@@ -39,6 +39,7 @@ class DesktopMenu(rumps.MenuItem):
     def __init__(self):
         super(DesktopMenu, self).__init__("Desktop")
         self.add(rumps.MenuItem("Toggle Hard Drive Icon", callback=self.toggle_hard_drive_icon_on_desktop))
+        self.add(rumps.MenuItem("Stage Manager", callback=self.toggle_stage_manager))
         self.add(rumps.MenuItem("Capture Screenshot", callback=self.capture_screenshot))
         self.add(rumps.MenuItem("Capture Selected Area", callback=self.capture_selected_area))
 
@@ -57,6 +58,12 @@ class DesktopMenu(rumps.MenuItem):
         modify_command = "defaults write com.apple.finder ShowExternalHardDrivesOnDesktop"
         execute_commands(verify_command, modify_command)
 
+    def toggle_stage_manager(self, sender):
+        current_value = subprocess.check_output(['defaults', 'read', 'com.apple.WindowManager', 'GloballyEnabled']).strip()
+        new_value = 'true' if current_value == b'0' else 'false'
+        subprocess.run(['defaults', 'write', 'com.apple.WindowManager', 'GloballyEnabled', '-bool', new_value])
+
+
 class UtilityApp(rumps.App):
     def __init__(self):
         super(UtilityApp, self).__init__("Utility", icon=os.path.join(os.getcwd(), "icon.png"))
@@ -72,3 +79,4 @@ class UtilityApp(rumps.App):
 if __name__ == "__main__":
     app = UtilityApp()
     app.run()
+

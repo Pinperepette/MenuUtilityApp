@@ -36,7 +36,7 @@ Run the App:
             Create Dock Spacer: Add a spacer to the Dock for better organization.
             
 
-![Anteprima](/immage.png)
+![Anteprima](/image.png)
 
 
 How to Contribute
